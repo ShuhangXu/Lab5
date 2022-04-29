@@ -24,62 +24,59 @@ public class TodoDatabaseTest {
     private TodoDatabase db;
 
     @Before
-    public void creatDb(){
+    public void createDb() {
         Context context = ApplicationProvider.getApplicationContext();
         db = Room.inMemoryDatabaseBuilder(context, TodoDatabase.class)
-                .allowMainThreadQueries()
-                .build();
+                .allowMainThreadQueries().build();
         dao = db.todoListItemDao();
     }
 
     @After
-    public void closeDb() throws IOException{
+    public void closeDb() throws IOException {
         db.close();
     }
 
     @Test
-    public void testInsert(){
-        TodoListItem item1 = new TodoListItem("Piazza time", false, 0);
-        TodoListItem item2 = new TodoListItem("Photos of Spider-Man", false, 1);
+    public void testInsert() {
+        TodoListItem item1 = new TodoListItem("Piazza time ", false, 0);
+        TodoListItem item2 = new TodoListItem("Photos of Spider_man", false, 1);
 
         long id1 = dao.insert(item1);
         long id2 = dao.insert(item2);
 
-        // Check that these have all been inserted with unique IDs.
-        assertNotEquals(id1,id2);
+        assertNotEquals(id1, id2);
     }
 
     @Test
-    public void testGet(){
-        TodoListItem insertedItem = new TodoListItem("Piazza time", false, 0);
-        long id = dao.insert(insertedItem);
+    public void testGet() {
+        TodoListItem inserteditem = new TodoListItem("Piazza time ", false, 0);
+        long id = dao.insert(inserteditem);
 
         TodoListItem item = dao.get(id);
         assertEquals(id, item.id);
-        assertEquals(insertedItem.text, item.text);
-        assertEquals(insertedItem.completed, item.completed);
-        assertEquals(insertedItem.order, item.order);
+        assertEquals(inserteditem.text, item.text);
+        assertEquals(inserteditem.completed, item.completed);
+        assertEquals(inserteditem.order, item.order);
     }
 
     @Test
-    public void testUpdate(){
-        TodoListItem item = new TodoListItem("Piazza time", false, 0);
+    public void testUpdate() {
+        TodoListItem item = new TodoListItem("Piazza time ", false, 0);
         long id = dao.insert(item);
 
         item = dao.get(id);
         item.text = "Photos of Spider-Man";
         int itemsUpdated = dao.update(item);
-        assertEquals(1,itemsUpdated);
+        assertEquals(1, itemsUpdated);
 
         item = dao.get(id);
         assertNotNull(item);
         assertEquals("Photos of Spider-Man", item.text);
-
     }
 
     @Test
-    public void testDelete(){
-        TodoListItem item = new TodoListItem("Pizza time", false, 0);
+    public void testDelete() {
+        TodoListItem item = new TodoListItem("Piazza time ", false, 0);
         long id = dao.insert(item);
 
         item = dao.get(id);
@@ -88,3 +85,4 @@ public class TodoDatabaseTest {
         assertNull(dao.get(id));
     }
 }
+
